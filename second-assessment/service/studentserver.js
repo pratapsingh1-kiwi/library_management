@@ -2,13 +2,6 @@ const student = require('../schema/student')
 
 
 const studentSignup = async function (req) {
-        student.find(async (err, val) => {
-            if (err) {
-                console.log(err);
-                res.send(err);
-            }
-            else {
-                if (val != null) {
                     const doc = new student({
                         name: req.body.name,
                         enrollment_no : req.body.enrollment_no,
@@ -20,24 +13,23 @@ const studentSignup = async function (req) {
                         password : req.body.password
                     });
                     const obj = await doc.save()
-                    console.log("user has been saved");
-                    res.send(obj);
+                    return obj;
+
     
                 }
-            }
-        })
-    }
+            
+      
+
 
 
 const studentLogin = function (req, res) {
-    user.findOne({ email: req.body.email }, async (err, val) => {
+    student.findOne({ email: req.body.email }, async (err, val) => {
         if (err) {
           console.log(err);
           res.send(err);
         } else {
           if (val == null) {
-            console.log("Here is no data for login");
-            res.send("Here is no data for login");
+            return "something went wrong"
           } else {
             if (val.active) {
               const password = req.body.password;
@@ -52,12 +44,10 @@ const studentLogin = function (req, res) {
                   userInformation: val,
                 });
               } else {
-                res.send("Password does not match");
-                console.log("password does not match");
+                return "password not match"
               }
             } else {
-              console.log("User is not active");
-              res.send("User is not active");
+              return "not valid"
             }
           }
         }
@@ -66,7 +56,7 @@ const studentLogin = function (req, res) {
 
 const studentUpdate = async function (req, res) {
 
-        const object = await userModel.findOneAndUpdate({ email: req.body.email }, {
+        const object = await student.findOneAndUpdate({ email: req.body.email }, {
             $set: {
                 name: req.body.name,
                 enrollment_no : req.body.enrollment_no,
@@ -84,11 +74,23 @@ const studentUpdate = async function (req, res) {
             return process.env.USER_UPDATED;
         }
     }
+    
+    const array = async function (req) {
+    var update =[];
+    update.push({
+      name: req.body.name,
+                enrollment_no : req.body.enrollment_no,
+                class : req.body.class,
+                phone_number : req.body.phone_number
+    })
+    return update
+  }
 
     module.exports = {
         studentSignup,
         studentLogin,
-        studentUpdate
+        studentUpdate,
+        array
     
     }
 

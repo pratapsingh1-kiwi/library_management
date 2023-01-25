@@ -1,8 +1,5 @@
-const student = () => {
-
-    const mongoose = require('mongoose');
-
-    const schemaDraft = new mongoose.Schema({
+const mongoose = require('mongoose');
+const schemaDraft = new mongoose.Schema({
 
         name : String,
         enrollment_no : String,
@@ -17,7 +14,6 @@ const student = () => {
             default : false
         }
     });
-    return schemaDraft;
-}
 
-module.exports.schemaDraft = student;
+
+module.exports = mongoose.model("student", schemaDraft);
