@@ -1,20 +1,17 @@
-const { signup,login,update} = require("../services/user.service");
-const { tokenHelper } = require("../helper/token.helper")
-const student = require("../model/user.model")
+const { signup, login, update, deleteo } = require("../services/user.service");
+const { tokenHelper } = require("../helper/token.helper");
+const student = require("../model/user.model");
+const borrowerService = require("../services/borrow.service");
 
 module.exports = {
-  getProfile: async (req, res, next) => {
-    const userId = req.userId;
-    const allPurchasedBooks = await borrowerService.findAllPurchasedBooks(
-      userId,
-      next
-    );
-    res.send({ books: allPurchasedBooks });
+  getProfile: async (req, res) => {
+    const allPurchasedBooks = await borrowerService.findAllPurchasedBooks(req);
+    res.send({ allPurchasedBooks });
   },
   signup: async (req, res) => {
     try {
-     const result = await signup(req);
-      console.log(result)
+      const result = await signup(req);
+      console.log(result);
       res.send(result);
     } catch (err) {
       res.send(err);
@@ -22,8 +19,8 @@ module.exports = {
   },
   login: async (req, res) => {
     try {
-     const result = await login(req);
-      console.log(result)
+      const result = await login(req);
+      console.log(result);
       res.send(result);
     } catch (err) {
       res.send(err);
@@ -31,8 +28,8 @@ module.exports = {
   },
   update: async (req, res) => {
     try {
-     const result = await update(req);
-      console.log(result)
+      const result = await update(req);
+      console.log(result);
       res.send(result);
     } catch (err) {
       res.send(err);
@@ -40,12 +37,11 @@ module.exports = {
   },
   delete: async (req, res) => {
     try {
-     const result = await delete(req);
-      console.log(result)
+      const result = await deleteo(req);
+      console.log(result);
       res.send(result);
     } catch (err) {
       res.send(err);
     }
   },
-
 };

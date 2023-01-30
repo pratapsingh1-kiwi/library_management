@@ -1,25 +1,20 @@
-const { returModel } = require("../model/return.model");
+const book = require("../model/book");
+const { borrowerModel } = require("../model/borrower.model");
 
 module.exports = {
-  returnBook: async (body, next) => {
+  returnBook: async (req, res) => {
     try {
-        const doc = new returModel({
-            userId: req.body.userId,
-            bookId: req.body.bookId
-        });
-        const obj = await doc.save()
-        return obj;
+      const userId = req.body.userId;
+      const bookId = req.body.bookId;
+      const book = await borrowerModel.findOne({ bookId });
+      if (!book) {
+        return res.send("Book already returned");
+      } else {
+        const purchasedBook = await borrowerModel.deleteOne({ bookId });
+        return res.send("Book returned successfully");
+      }
     } catch (e) {
-      console.log(e.toString());
-      next(e);
-    }
-  },
-  findReturnBookById: async (userId, bookId, next) => {
-    try {
-      return await dbHelper.findOne(returModel, { userId, bookId }, {}, next);
-    } catch (e) {
-      console.log(e.toString());
-      next(e);
+      return e;
     }
   },
 };
